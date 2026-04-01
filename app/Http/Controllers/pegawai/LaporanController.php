@@ -30,13 +30,18 @@ class LaporanController extends Controller
             'isi_laporan' => $validated['isi_laporan'],
         ]);
 
-        if ($request->hasFile('bukti')) {
+        $files = $request->file('bukti', []);
+        if (is_array($files) && count($files)) {
             $year = now()->year;
             $month = str_pad((string) now()->month, 2, '0', STR_PAD_LEFT);
             $owner = $pegawai->nip ?: 'user-' . $pegawai->id;
             $baseDir = "bukti/{$year}/{$month}/{$owner}";
 
-            foreach ($request->file('bukti') as $index => $file) {
+            foreach ($files as $index => $file) {
+                if (! $file) {
+                    continue;
+                }
+
                 $ext = strtolower($file->getClientOriginalExtension());
                 $safeExt = $ext ?: 'jpg';
                 $name = $today . '_' . ($index + 1) . '.' . $safeExt;

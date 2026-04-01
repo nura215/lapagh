@@ -50,8 +50,8 @@ document.addEventListener('DOMContentLoaded', function () {
             selectedFiles = selectedFiles.slice(0, 5);
         }
 
+        input.value = '';
         syncInputFiles();
         renderPreview();
-        input.value = '';
     });
 });

@@ -45,7 +45,7 @@
         @if ($laporan->bukti->count())
             <div class="table-actions">
                 @foreach ($laporan->bukti as $item)
-                    <a class="btn btn-outline" href="{{ \Illuminate\Support\Facades\Storage::url($item->file_path) }}" target="_blank">Lihat Bukti</a>
+                    <a class="btn btn-outline" href="{{ $item->url }}" target="_blank">Lihat Bukti</a>
                 @endforeach
             </div>
         @else
