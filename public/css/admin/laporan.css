@@ -151,3 +151,18 @@ font-size:16px;
     font-size:14px;
 }
 }
+
+.identity-table{
+border-collapse:collapse;
+margin-bottom:16px;
+}
+
+.identity-table td{
+padding:4px 0;
+font-size:15px;
+}
+
+.identity-table .label{
+width:180px;
+font-weight:900;
+}

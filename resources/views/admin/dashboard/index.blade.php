@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
+@section('title', 'Dasbor')
+
 @section('content')
 
 <h1 class="page-title">Selamat Datang, Admin</h1>

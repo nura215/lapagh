@@ -1,5 +1,7 @@
 @extends('layouts.auth')
 
+@section('title', 'Login')
+
 @section('content')
 
 <div class="auth-wrapper">
@@ -10,14 +12,10 @@
         <img src="{{ asset('images/logo.png') }}" class="logo-lapar" alt="Logo">
 
         <h2 class="title-lkh">
-            LAPORAN KINERJA HARIAN <br>
-            DI LINGKUNGAN DISKOMINFO
+            LAPORAN PENGGAWEAN HARIAN <br>
+            DINAS KOMUNIKASI DAN INFORMATIKA
+            KOTA PAGAR ALAM
         </h2>
-
-        <p class="desc-lkh">
-            Lorem ipsum dolor sit amet, consectetur
-            adipiscing elit
-        </p>
 
     </div>
 
@@ -63,7 +61,7 @@
                         autocomplete="current-password"
                         required
                         >
-                        <i class="fa-solid fa-eye toggle-password" id="togglePassword"></i>
+                        <i class="fa-solid fa-eye-slash toggle-password" id="togglePassword"></i>
                     </div>
 
                 </div>

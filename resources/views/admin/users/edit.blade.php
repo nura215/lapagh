@@ -1,7 +1,9 @@
 @extends('layouts.admin')
 
+@section('title', 'Edit')
+
 @section('content')
-    <div class="breadcrumb">dasbor &gt; User</div>
+    <div class="breadcrumb">dasbor / User</div>
     <h1 class="page-title">Edit User</h1>
 
     @if ($errors->any())

@@ -1,5 +1,7 @@
 @extends('layouts.auth')
 
+@section('title', 'Reset')
+
 @section('content')
 <div class="auth-wrapper">
     <div class="auth-left">
@@ -43,7 +45,7 @@
                             required
                             autocomplete="new-password"
                         >
-                        <i class="fa-solid fa-eye toggle-password"></i>
+                        <i class="fa-solid fa-eye-slash toggle-password"></i>
                     </div>
                 </div>
 
@@ -57,7 +59,7 @@
                             required
                             autocomplete="new-password"
                         >
-                        <i class="fa-solid fa-eye toggle-password"></i>
+                        <i class="fa-solid fa-eye-slash toggle-password"></i>
                     </div>
                 </div>
 

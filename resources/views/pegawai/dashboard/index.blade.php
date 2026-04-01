@@ -1,5 +1,7 @@
 @extends('layouts.pegawai')
 
+@section('title', 'Dasbor')
+
 @section('content')
     <div class="breadcrumb">dasbor / Laporan</div>
     <h1 class="page-title">Laporan Kinerja Harian (LKH)</h1>
@@ -19,7 +21,18 @@
                 </svg>
                 <span class="identitas_pegawai">Identitas Pagawai</span>
             </div>
-            <div class="identity-card">
+            <div class="identity-card identity-with-photo">
+                @php
+                    $photoUrl = $user->pegawai?->foto_url;
+                    $initial = strtoupper(mb_substr($user->pegawai?->nama ?? $user->username ?? 'U', 0, 1));
+                @endphp
+                <div class="identity-photo">
+                    @if ($photoUrl)
+                        <img src="{{ $photoUrl }}" alt="Foto profil pegawai">
+                    @else
+                        <div class="identity-photo__initial">{{ $initial }}</div>
+                    @endif
+                </div>
                 <div class="identity-list">
                     <div class="identity-row">
                         <strong>Nama</strong>

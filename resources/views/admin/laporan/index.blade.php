@@ -1,5 +1,8 @@
 @extends('layouts.admin')
 
+
+@section('title', 'Laporan')
+
 @section('content')
     <div class="breadcrumb">dasbor / laporan</div>
     <h1 class="page-title">Laporan</h1>

@@ -191,7 +191,7 @@ class UserController extends Controller
 
         return response()->streamDownload(function () use ($users) {
             $handle = fopen('php://output', 'w');
-            fputcsv($handle, ['Nama', 'NIP', 'Status Pegawai', 'Jabatan', 'Username', 'First Login']);
+            fputcsv($handle, ['Nama', 'NIP', 'Status Pegawai', 'Jabatan', 'Username', 'Password Sementara']);
 
             foreach ($users as $user) {
                 fputcsv($handle, [
@@ -200,7 +200,7 @@ class UserController extends Controller
                     $user->pegawai?->status_pegawai,
                     $user->pegawai?->jabatan,
                     $user->username,
-                    $user->is_first_login ? 'Ya' : 'Tidak',
+                    $user->temp_password ?? '',
                 ]);
             }
 
@@ -265,5 +265,4 @@ class UserController extends Controller
         return Str::random(6) . random_int(10, 99) . '!';
     }
 }
-
 

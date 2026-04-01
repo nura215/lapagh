@@ -1,13 +1,22 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // toggle password for all eye icons
     document.querySelectorAll(".toggle-password").forEach(function (icon) {
         const input = icon.closest(".password-wrapper")?.querySelector("input");
         if (!input) return;
+
         icon.addEventListener("click", function () {
-            const type = input.type === "password" ? "text" : "password";
-            input.type = type;
-            icon.classList.toggle("fa-eye");
-            icon.classList.toggle("fa-eye-slash");
+            const isHidden = input.type === "password";
+
+            input.type = isHidden ? "text" : "password";
+
+            if (isHidden) {
+                // sekarang terlihat
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            } else {
+                // sekarang disembunyikan
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            }
         });
     });
 

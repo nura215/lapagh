@@ -236,7 +236,6 @@
     height:16px;
 }
 
-/* pastikan layout tidak memotong scroll */
 .app-content{
     overflow-x:auto;
 }

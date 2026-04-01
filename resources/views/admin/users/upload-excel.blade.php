@@ -1,5 +1,8 @@
 @extends('layouts.admin')
 
+
+@section('title', 'Upload')
+
 @section('content')
     <div class="breadcrumb">dasbor / user / upload </div>
     <h1 class="page-title">Upload Data User</h1>

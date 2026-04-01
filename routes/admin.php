@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\LaporanController;
+use App\Http\Controllers\admin\PasswordController;
 use App\Http\Controllers\admin\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,4 +28,6 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('/laporan/download', [LaporanController::class, 'download'])->name('laporan.download');
         Route::get('/laporan/download-bulanan', [LaporanController::class, 'downloadBulanan'])->name('laporan.download.bulanan');
         Route::get('/laporan/{laporan}', [LaporanController::class, 'show'])->name('laporan.show');
+
+        Route::post('/password', [PasswordController::class, 'update'])->name('password.update');
     });

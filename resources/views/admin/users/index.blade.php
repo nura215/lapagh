@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
+
+@section('title', 'User')
 @section('content')
     <div class="breadcrumb">dasbor / User</div>
     <h1 class="page-title">Daftar User</h1>

@@ -1,23 +1,47 @@
 @extends('layouts.admin')
 
+@section('title', 'Detail')
+
 @section('content')
-    <div class="breadcrumb">dasbor &gt; Laporan</div>
+    <div class="breadcrumb">dasbor / Laporan</div>
     <h1 class="page-title">Detail Laporan</h1>
 
     <div class="card">
-        <div class="section-label">Identitas</div>
-        <div class="identity-list" style="margin-bottom: 16px;">
-            <div><strong>Nama</strong> {{ $laporan->pegawai?->nama }}</div>
-            <div><strong>NIP</strong> {{ $laporan->pegawai?->nip ?? '-' }}</div>
-            <div><strong>Status Pegawai</strong> {{ $laporan->pegawai?->status_pegawai ?? '-' }}</div>
-            <div><strong>Jabatan</strong> {{ $laporan->pegawai?->jabatan ?? '-' }}</div>
-            <div><strong>Tanggal</strong> {{ $laporan->tanggal?->translatedFormat('d F Y') }}</div>
-        </div>
+        <div class="section-lprn" style="color:#2563eb; ">Identitas</div>
 
-        <div class="section-label">Laporan Kinerja Harian (LKH)</div>
+        <table class="identity-table">
+
+        <tr>
+        <td class="label"><strong>Nama</strong></td>
+        <td>: {{ $laporan->pegawai?->nama }}</td>
+        </tr>
+
+        <tr>
+        <td class="label"><strong>NIP</strong></td>
+        <td>: {{ $laporan->pegawai?->nip ?? '-' }}</td>
+        </tr>
+
+        <tr>
+        <td class="label"><strong>Status Pegawai</strong></td>
+        <td>: {{ $laporan->pegawai?->status_pegawai ?? '-' }}</td>
+        </tr>
+
+        <tr>
+        <td class="label"><strong>Jabatan</strong></td>
+        <td>: {{ $laporan->pegawai?->jabatan ?? '-' }}</td>
+        </tr>
+
+        <tr>
+        <td class="label"><strong>Tanggal</strong></td>
+        <td>: {{ $laporan->tanggal?->translatedFormat('d F Y') }}</td>
+        </tr>
+
+        </table>
+
+        <div class="section-lprn " style="color:#2563eb; margin-top:10px; ">Laporan Kinerja Harian (LKH)</div>
         <p>{!! nl2br(e($laporan->isi_laporan)) !!}</p>
 
-        <div class="section-label">Bukti Pendukung</div>
+        <div class="section-lprn" style=" margin-top:10px; margin-bottom:10px">Bukti Pendukung</div>
         @if ($laporan->bukti->count())
             <div class="table-actions">
                 @foreach ($laporan->bukti as $item)
