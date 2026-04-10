@@ -14,8 +14,51 @@ class LaporanController extends Controller
         $validated = $request->validate([
             'isi_laporan' => ['required', 'string', 'max:2000'],
             'bukti' => ['nullable', 'array', 'max:5'],
-            'bukti.*' => ['file', 'max:4096', 'mimes:jpg,jpeg,png,heic'],
+            'bukti.*' => ['file', 'mimes:jpg,jpeg,png,heic,pdf'],
+        ], [
+            'bukti.max' => 'Maksimal 5 file bukti pendukung.',
+            'bukti.*.file' => 'Salah satu berkas bukti tidak valid.',
+            'bukti.*.mimes' => 'Format file bukti harus JPG, JPEG, PNG, HEIC, atau PDF.',
         ]);
+
+        $files = $request->file('bukti', []);
+        $pdfCount = 0;
+        $uploadErrors = [];
+        if (is_array($files) && count($files)) {
+            foreach ($files as $file) {
+                if (! $file) {
+                    continue;
+                }
+
+                $originalName = (string) $file->getClientOriginalName();
+                $ext = strtolower((string) $file->getClientOriginalExtension());
+                $mime = strtolower((string) $file->getMimeType());
+                $size = (int) $file->getSize();
+                $isPdf = $ext === 'pdf' || str_contains($mime, 'pdf');
+
+                if ($isPdf) {
+                    $pdfCount++;
+                    if ($size > 5 * 1024 * 1024) {
+                        $uploadErrors[] = 'Ukuran file PDF "' . $originalName . '" melebihi 5 MB.';
+                    }
+                    continue;
+                }
+
+                if ($size > 2 * 1024 * 1024) {
+                    $uploadErrors[] = 'Ukuran file gambar "' . $originalName . '" melebihi 2 MB.';
+                }
+            }
+        }
+
+        if ($pdfCount > 1) {
+            $uploadErrors[] = 'Maksimal 1 file PDF yang bisa diunggah.';
+        }
+
+        if (count($uploadErrors)) {
+            return back()
+                ->withInput()
+                ->withErrors(['bukti' => array_values(array_unique($uploadErrors))]);
+        }
 
         $pegawai = $request->user()->pegawai;
         if (! $pegawai) {
@@ -30,7 +73,6 @@ class LaporanController extends Controller
             'isi_laporan' => $validated['isi_laporan'],
         ]);
 
-        $files = $request->file('bukti', []);
         if (is_array($files) && count($files)) {
             $year = now()->year;
             $month = str_pad((string) now()->month, 2, '0', STR_PAD_LEFT);

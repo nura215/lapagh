@@ -11,8 +11,26 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $search = $request->string('q')->trim()->toString();
+        $sortBy = $request->string('sort')->trim()->toString();
+        $sortDir = strtolower($request->string('dir')->toString()) === 'asc' ? 'asc' : 'desc';
 
-        $users = User::with('pegawai')
+        $sortableColumns = [
+            'nama' => 'pegawai.nama',
+            'nip' => 'pegawai.nip',
+            'status_pegawai' => 'pegawai.status_pegawai',
+            'jabatan' => 'pegawai.jabatan',
+            'username' => 'users.username',
+        ];
+
+        if (! array_key_exists($sortBy, $sortableColumns)) {
+            $sortBy = 'username';
+            $sortDir = 'asc';
+        }
+
+        $users = User::query()
+            ->select('users.*')
+            ->with('pegawai')
+            ->leftJoin('pegawai', 'pegawai.user_id', '=', 'users.id')
             ->whereIn('role', [User::ROLE_ASN, User::ROLE_NON_ASN])
             ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($sub) use ($search) {
@@ -25,13 +43,16 @@ class DashboardController extends Controller
                         });
                 });
             })
-            ->orderBy('username')
+            ->orderBy($sortableColumns[$sortBy], $sortDir)
+            ->orderBy('users.id')
             ->paginate(20)
             ->withQueryString();
 
         return view('admin.dashboard.index', [
             'users' => $users,
             'search' => $search,
+            'sortBy' => $sortBy,
+            'sortDir' => $sortDir,
         ]);
     }
 }

@@ -13,8 +13,26 @@ class LaporanController extends Controller
     public function index(Request $request)
     {
         $search = $request->string('q')->trim()->toString();
+        $sortBy = $request->string('sort')->trim()->toString();
+        $sortDir = strtolower($request->string('dir')->toString()) === 'asc' ? 'asc' : 'desc';
 
-        $laporan = Laporan::with('pegawai.user', 'bukti')
+        $sortableColumns = [
+            'tanggal' => 'laporan.tanggal',
+            'nama' => 'pegawai.nama',
+            'nip' => 'pegawai.nip',
+            'status_pegawai' => 'pegawai.status_pegawai',
+            'jabatan' => 'pegawai.jabatan',
+        ];
+
+        if (! array_key_exists($sortBy, $sortableColumns)) {
+            $sortBy = 'tanggal';
+            $sortDir = 'desc';
+        }
+
+        $laporan = Laporan::query()
+            ->select('laporan.*')
+            ->with('pegawai.user', 'bukti')
+            ->leftJoin('pegawai', 'pegawai.id', '=', 'laporan.pegawai_id')
             ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($sub) use ($search) {
                     $sub->where('isi_laporan', 'like', "%{$search}%")
@@ -29,13 +47,16 @@ class LaporanController extends Controller
                         });
                 });
             })
-            ->orderByDesc('tanggal')
+            ->orderBy($sortableColumns[$sortBy], $sortDir)
+            ->orderByDesc('laporan.id')
             ->paginate(20)
             ->withQueryString();
 
         return view('admin.laporan.index', [
             'laporan' => $laporan,
             'search' => $search,
+            'sortBy' => $sortBy,
+            'sortDir' => $sortDir,
         ]);
     }
 

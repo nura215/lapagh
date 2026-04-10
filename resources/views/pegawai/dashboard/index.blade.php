@@ -6,13 +6,6 @@
     <div class="breadcrumb">dasbor / Laporan</div>
     <h1 class="page-title">Laporan Kinerja Harian (LKH)</h1>
 
-    @if (session('success'))
-        <div class="alert success">{{ session('success') }}</div>
-    @endif
-    @if ($errors->any())
-        <div class="alert error">{{ $errors->first() }}</div>
-    @endif
-
     <div class="grid-2">
         <div class="card identity-panel">
             <div class="section-heading identity-heading">
@@ -56,6 +49,9 @@
         </div>
 
         <div class="card lkh-card">
+            @php
+                $todayLabel = now()->translatedFormat('d F Y');
+            @endphp
             <form method="POST" action="{{ route('pegawai.laporan.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="form-section">
@@ -66,6 +62,7 @@
                             <path d="M9 12h6M9 16h6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                         <span>Isi Laporan</span>
+                        <span class="section-date"> {{ $todayLabel }}</span>
                     </div>
                     <textarea class="textarea" id="isi_laporan" name="isi_laporan" placeholder="Tulis laporan harian Anda di sini..." required>{{ old('isi_laporan') }}</textarea>
                 </div>
@@ -76,9 +73,10 @@
                             <path d="M14 11a5 5 0 0 1 0 7l-2 2a5 5 0 1 1-7-7l2-2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                         <span>Upload Bukti Pendukung</span>
+                        <span class="section-date"> {{ $todayLabel }}</span>
                     </div>
 
-                    <input class="visually-hidden" id="bukti" name="bukti[]" type="file" multiple accept=".jpg,.jpeg,.png,.heic,image/*">
+                    <input class="visually-hidden" id="bukti" name="bukti[]" type="file" multiple accept=".jpg,.jpeg,.png,.heic,.pdf,image/*,application/pdf">
                     <label class="upload-dropzone" for="bukti">
                         <div class="upload-icon">
                             <svg class="icon icon-cloud" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">
@@ -88,7 +86,7 @@
                         </div>
                         <div class="upload-text">
                             <div class="upload-title">Klik untuk <span class="upload-link">memilih file</span></div>
-                            <div class="upload-subtitle">JPG, JPEG, PNG, HEIC — Maks 5 foto</div>
+                            <div class="upload-subtitle">JPG, JPEG, PNG, HEIC maks 2 MB, PDF maks 5 MB (maks 5 file, PDF hanya 1 file)</div>
                         </div>
                     </label>
                     <div id="preview-bukti" class="preview-grid"></div>
@@ -104,5 +102,29 @@
 @endpush
 
 @push('scripts')
+@php
+    $pageAlerts = [];
+
+    if (session('success')) {
+        $pageAlerts[] = [
+            'type' => 'success',
+            'title' => 'Success!',
+            'messages' => [session('success')],
+            'buttonText' => 'Continue',
+        ];
+    }
+
+    if ($errors->any()) {
+        $pageAlerts[] = [
+            'type' => 'error',
+            'title' => 'Ooops!',
+            'messages' => array_values(array_unique($errors->all())),
+            'buttonText' => 'Try Again',
+        ];
+    }
+@endphp
+<script>
+    window.__pageAlerts = @json($pageAlerts);
+</script>
 <script src="{{ asset('js/user.js') }}"></script>
 @endpush

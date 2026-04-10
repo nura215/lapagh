@@ -23,6 +23,8 @@
                 placeholder="Search...."
                 value="{{ $search }}"
             >
+            <input type="hidden" name="sort" value="{{ $sortBy }}">
+            <input type="hidden" name="dir" value="{{ $sortDir }}">
         </form>
     </div>
 
@@ -38,17 +40,59 @@
 <div class="table-wrapper">
 
     <div class="table-scroll">
+        @php
+            $sortLink = function (string $column) use ($search, $sortBy, $sortDir) {
+                return route('admin.dashboard', [
+                    'q' => $search !== '' ? $search : null,
+                    'sort' => $column,
+                    'dir' => $sortBy === $column && $sortDir === 'asc' ? 'desc' : 'asc',
+                ]);
+            };
+
+            $sortClass = function (string $column) use ($sortBy, $sortDir) {
+                if ($sortBy !== $column) {
+                    return '';
+                }
+
+                return $sortDir === 'asc' ? 'active asc' : 'active desc';
+            };
+        @endphp
 
         <table class="table">
 
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Nama</th>
-                    <th>NIP</th>
-                    <th>Status Pegawai</th>
-                    <th>Jabatan</th>
-                    <th>Username</th>
+                    <th>
+                        <a class="sort-trigger {{ $sortClass('nama') }}" href="{{ $sortLink('nama') }}">
+                            <span>Nama</span>
+                            <span class="sort-icon" aria-hidden="true"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a class="sort-trigger {{ $sortClass('nip') }}" href="{{ $sortLink('nip') }}">
+                            <span>NIP</span>
+                            <span class="sort-icon" aria-hidden="true"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a class="sort-trigger {{ $sortClass('status_pegawai') }}" href="{{ $sortLink('status_pegawai') }}">
+                            <span>Status Pegawai</span>
+                            <span class="sort-icon" aria-hidden="true"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a class="sort-trigger {{ $sortClass('jabatan') }}" href="{{ $sortLink('jabatan') }}">
+                            <span>Jabatan</span>
+                            <span class="sort-icon" aria-hidden="true"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a class="sort-trigger {{ $sortClass('username') }}" href="{{ $sortLink('username') }}">
+                            <span>Username</span>
+                            <span class="sort-icon" aria-hidden="true"></span>
+                        </a>
+                    </th>
                     <th>Password</th>
                     <th>Aksi</th>
                 </tr>
@@ -81,7 +125,7 @@
             @empty
 
             <tr>
-                <td colspan="7">Belum ada data pegawai.</td>
+                <td colspan="8">Belum ada data pegawai.</td>
             </tr>
 
             @endforelse
